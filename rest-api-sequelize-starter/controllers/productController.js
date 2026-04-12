@@ -34,11 +34,33 @@ exports.createProduct = async (req, res) => {
         if(!price){
             return res.status(400).json({message: 'Price is required'});
         }
-        const product =await Product.create({title, price});
+        const product = await Product.create({title, price});
         return res.status(201).json({message: 'Product created successfully', product});
     }
     catch (err){
         return res.status(500).json({message: 'Error creating product', error: err});
+    }
+}
+
+exports.updateProduct = async (req, res) => {
+    try{
+        const id = Number(req.params.id);
+        const title = req.body.title;
+        const price = req.body.price;
+        if(!title){
+            return res.status(400).json({message: 'Title is required'});
+        }   
+        if(!price){
+            return res.status(400).json({message: 'Price is required'});
+        }
+        const [product] = await Product.update({title, price}, {where: {id}});
+        if(product === 0){
+            return res.status(404).json({message: 'Product not found'});
+        }
+        return res.status(200).json({message: 'Product updated successfully', product});
+    }
+    catch(err){
+        return res.status(500).json({message: 'Error updating product', error: err});
     }
 }
 
