@@ -27,6 +27,23 @@ exports.createProduct = (req, res) => {
     return res.status(201).json({message: 'Product created successfully', product});
 }
 
+exports.updateProduct = (req, res) => {
+    const id = Number(req.params.id);
+    const title = req.body.title;
+    const price = req.body.price;
+    if(!title){
+        return res.status(400).json({message: 'Title is required'});
+    }
+    if(!price){
+        return res.status(400).json({message: 'Price is required'});
+    }
+    const product = Product.updateProduct(id, title, price);
+    if(!product){
+        return res.status(404).json({message: 'Product not found'});
+    }
+    return res.status(200).json({message: 'Product updated successfully', product});
+}
+
 exports.deleteProduct = (req, res) => {
     const id = Number(req.params.id);
     const success = Product.deleteProduct(id);
