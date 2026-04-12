@@ -15,6 +15,11 @@ exports.createProduct = async (title, price) => {
     return {id: result.insertId, title, price};
 }
 
+exports.updateProduct = async (id, title, price) => {
+    const [result] = await db.query('UPDATE products SET title = ?, price = ? WHERE id = ?', [title, price, id]);
+    return result.affectedRows > 0 ? {id, title, price} : null;
+}
+
 exports.deleteProduct = async (id) => {
     const [result] = await db.query('DELETE FROM products WHERE id = ?', [id]);
     return result.affectedRows > 0;
